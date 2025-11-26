@@ -1,0 +1,705 @@
+{
+  "name": "NeuraLetter Suite: Workflow - Automate Hyper-Personalized B2B Outreach from CSV using AI",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 55
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        832,
+        608
+      ],
+      "id": "97c117a5-8ca9-4fc3-88b8-ae062e8ce510",
+      "name": "Schedule Trigger",
+      "executeOnce": false,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.is_sent }}",
+                    "rightValue": "=FALSE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "110088cc-1766-4949-b133-7bf98296bcd0"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        2032,
+        608
+      ],
+      "id": "378dd231-519d-41b8-983a-a1d4a8436641",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        2272,
+        1440
+      ],
+      "id": "df91ec6f-dc68-4a41-984a-4ab6f4e514c7",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "content": "# NeuraLetter Suite: Workflow\n## Automate Hyper-Personalized B2B Outreach from CSV using AI\nQuestions? Visit [NeuraLetter.com](https://neuraletter.com) website or reach out via forum: [Node](https://community.n8n.io/u/node/summary)\n",
+        "width": 816,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -80,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "dcf30121-5a48-4f12-b89e-6eb4a7402200",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "fileSelector": "/home/user/Desktop/neuraletter_suite_scrap.CSV",
+        "options": {
+          "fileName": "={{ $('Pick One Row').item.json['Company Name'] }}"
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        3200,
+        608
+      ],
+      "id": "1c6a211e-27db-4ebe-867f-c419a702fdcb",
+      "name": "Get E-mail attachment"
+    },
+    {
+      "parameters": {
+        "content": "## File Writing Operations",
+        "height": 640,
+        "width": 736
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1952,
+        960
+      ],
+      "typeVersion": 1,
+      "id": "7e728138-9c31-46da-806b-4af39de16b2b",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// All the data\nconst items = $input.all();\n\n// Iterate over all the data\nfor (let i = 0; i < items.length; i++) {\n  if (items[i].json.sent === 'FALSE') {\n    items[i].json.sent = 'TRUE'\n    return items;\n  }\n}\nreturn [];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2032,
+        1440
+      ],
+      "id": "ced3c137-8e9c-49bc-bb24-f86296c5562e",
+      "name": "Set FALSE to TRUE used rows"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/home/user/Desktop/neuraletter_suite_scrap.CSV",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        2496,
+        1440
+      ],
+      "id": "91af0ad8-5575-4217-8518-472b8e7d7904",
+      "name": "Write CSV To Disk"
+    },
+    {
+      "parameters": {
+        "content": "## File reading operations",
+        "height": 640,
+        "width": 960
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1472,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "15a45db5-460c-4880-96f0-eeb045d91d4d",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=In what language is this text written:\n```\n{{ $('Pick One Row').item.json.About }}\n```",
+        "options": {
+          "systemMessage": "=You are an AI Email Subject Line Strategist. Your single task is to generate a highly compelling, personalized email Subject Line based on the detected language and the provided product niche.\n\nInstructions:\n1. LANGUAGE: Detect the language of the incoming text.\n2. PERSONALIZATION: The Subject Line must incorporate the target company's name or a direct reference to their business area (derived from the \"About\" text).\n3. TONE: Professional and curiosity-inducing.\n4. SPAM FILTER: The output must NOT use promotional or spam-trigger words (e.g., \"free,\" \"urgent,\" \"guarantee\").\n5. OUTPUT: Translate the following Subject Line template into the detected language, tailoring it to the company's context: \"Quick Question for [Company Name] about [Product Niche/Topic]\"\n\nREMEMBER: You will write NOTHING other than the final Subject Line text."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2848,
+        608
+      ],
+      "id": "ac26fa46-1af2-4e47-a18e-2eeb23d9ce24",
+      "name": "AI for language decision"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=About us [or \"our product\"]:\n```\n[Enter your own company \"about\" text or your product features/information you want to sell here.]\n```\nAbout {{ $json['Company Name'] }}:\n```\n{{ $json.About }}\n```",
+        "options": {
+          "systemMessage": "=You're an expert B2B Copywriter and Sales Specialist. Using company and product information gathered from the user, you'll create personalized emails using formal, \"I\" language.\n\nYour emails should be professional, fluid, and persuasive. Always use a positive tone and avoid unnecessary details. Accurately integrate all the information provided by the user.\n\nInstructions:\n1. LANGUAGE: Analyze the \"About {{ $json['Company Name'] }}\" text. Write the email in the EXACT SAME language used in that text (e.g., if German, write in German).\n2. THE BRIDGE: Do not just list features. Specifically explain how the \"About us/product\" information solves a problem implied in the \"About {{ $json['Company Name'] }}\" text.\n3. TONE: Professional, fluid, \"I\" language (e.g., I noticed, I believe), and conversational.\n4. SPAM FILTER: STRICTLY AVOID spam-trigger words like \"free\", \"guarantee\", \"100%\", \"buy now\", \"urgent\".\n5. FORMAT:\n   - Start with a salutation appropriate to the detected language (e.g., \"Dear {{ $json['Company Name'] }},\").\n   - Max 2 short paragraphs (~150 words).\n   - Use the <br><br> tag for line breaks instead of \"\\n\".\n6. CLOSING: End with a soft call to action (e.g., \"Worth a chat?\") and sign off respectfully.\n   Finally, write the sender's name: [Add your first name and last name here]\n\nRemember: Do not write anything other than the email content."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2496,
+        608
+      ],
+      "id": "eb072711-47a2-41e2-a58c-42df72eb140c",
+      "name": "AI for create email content"
+    },
+    {
+      "parameters": {
+        "content": "## STEP #4\n### 📂 Read CSV File From Disk\n**Start by providing your lead data.**\nUse your CSV file from [NeuraLetter Suite: Scrap](https://chromewebstore.google.com/detail/neuraletter-suite-scrap/njdhnogadpoafagjibjcopbngknjiikl?authuser=0&hl=tr) or your own CSV file. After that, double-click to set the **Read CSV File From Disk** node.\n\n**Operation:** `Read File(s) From Disk`.\n**File(s) Selector:** `/home/user/Desktop/neuraletter_suite_scrap.CSV` (This is example path)\n**File Extension:** `csv`\n**File Name:** `neuraletter_suite_scrap.CSV`",
+        "height": 592,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1472,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "a92838ca-a2bb-4a9f-a330-caadf7ebabf7",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## STEP #1\n### ⏰ Schedule Trigger (Time-Based)\n**Start here.**\nAfter double-clicking, schedule the execution interval to be between 55 and 115 minutes (e.g., every 55, 75, or 115 min).\nThis staggered timing is crucial for maintaining good sender reputation and preventing emails from landing in the spam folder.",
+        "height": 592,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        752,
+        176
+      ],
+      "id": "675cac46-a079-464b-ad1f-a92142aa4866",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.randomNum }}",
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1296,
+        608
+      ],
+      "id": "543e5dae-6bfb-47d8-990f-07c15deaff42",
+      "name": "Wait",
+      "webhookId": "21d7b994-6ecd-43ca-9e44-a6e46a623ef8"
+    },
+    {
+      "parameters": {
+        "content": "## STEP #2\n### 🔢 Random Time Generator \nInspired by the Fisher-Yates Shuffle algorithm, this node generates an unpredictable wait time. Mimics human behavior, helps to bypass spam and bot detection systems. `minimumTime` and `maximumTime` variables are adjustable.\n-> The `maximumTime` variable must be at least 5 minutes less than the execution time set in the Schedule Trigger (Step #1).\n-> E.g: If the Schedule Trigger (Step #1) is set to 55 minutes, set the `maximumTime` here to 50.",
+        "height": 592,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        992,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "82bb51c2-fc70-4fb5-9389-996b75676e53",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## STEP #3\n### ⏳ Wait\nThis node pauses the workflow for the random duration (in minutes) generated in the previous step (Step #2).\n\nConfiguration Check:\nEnsure the following settings are active to correctly use the generated random time:\n-> **Resume:** `After Time Interval`\n-> **Wait Unit:** `Minutes`\n\nNo adjustment is needed unless you change the core timing logic.",
+        "height": 592,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1232,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "090aa428-48c7-4cb6-b212-b9c1f82080ca",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "### ⚙️ Extract From File\nThis node automatically converts the binary CSV file data into a readable format. **No user adjustment is required.**\n\n**Important Pre-condition:**\n-> Your CSV file **must** contain an `is_sent` column.\n-> All rows in the `is_sent` column **must** be set to `FALSE` initially.\n**Troubleshooting (If fails)**:\n->  Check if the file path in Step #4 is correct.\n->  Check if your CSV file is empty.\n->  Verify that the `is_sent` column exists and all rows are set to `FALSE`.",
+        "height": 592,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1712,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "a7e96903-9e91-45bd-90d1-a5e3fae88382",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "=data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        608
+      ],
+      "id": "e3fe45ef-ca1c-420a-bcbd-d6911fcba151",
+      "name": "Extract from File",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "content": "# 🚀 Before Running the Workflow\n\nThis workflow automates hyper-personalized dynamic outreach. Please ensure you complete the following critical steps before activation:\n\n### 1. Data Preparation (CSV File)\n* **Basic Columns:** Your CSV file must contain the following columns: `Company Name`, `Email`, and `About`.\n* **Status Column:** A column named `is_sent` is **mandatory** for preventing duplicate sending.\n    * **Action:** Open your CSV file, create the `is_sent` column, and fill all its rows with the value `FALSE`.\n    * **Final:** Save the file in the `.CSV` format.\n\n### 2. Credentials & Setup\n* **API Keys:** You require two sets of credentials:\n    1.  **AI Service:** Your API Key for your chosen AI provider (e.g., OpenAI).\n    2.  **Email Service:** Credentials for your email sending method (e.g., Gmail OAuth2 or SMTP details).\n* **N8N Knowledge:** Basic familiarity with the n8n interface is recommended.\n\n### 3. Workflow Configuration\n* **Follow Steps:** Configure all nodes by strictly following the **STEP # numberings** provided in the sticky notes for a comfortable and accurate setup.\n* **Default Configuration:** All nodes (except for credentials and placeholders) are already pre-configured with the necessary settings, allowing you to focus only on adding your personal information and API keys.\n* **Testing:** After setup is complete, **TEST THE ENTIRE WORKFLOW** by sending emails to your own test accounts first.",
+        "height": 592,
+        "width": 816,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -80,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "9b70b76e-d0a3-47c3-80c1-b24210533932",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## STEP #5\n### ➡️ Switch\nPrevents duplicate emails by only allowing rows where `is_sent` is `FALSE` to proceed.\n\n**Configuration Check:**\n-> Mode: `Rules`\n-> Value 1: `{{ $json.is_sent }}`\n-> Condition: `is equal to`\n-> Value 2: `FALSE`\n\n**Pro Tip:** You can drag the `is_sent` field from the **Extract Data** output directly to the Value 1 input field.",
+        "height": 592,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1952,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "1dd0cfb2-25bc-4ac6-8b10-6b6d1536c689",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "### 🎯 Pick One Row (From Item List)\nThis node takes the filtered list of `is_sent=FALSE` leads and returns **only the first row** to be processed in this cycle.\n\n**🛑 ATTENTION:**\nThis is an automatic step. **Do not modify this node.**",
+        "height": 592,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2192,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "e2706039-6e1a-4eb0-9e89-05caa809a0cb",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## 🤖 AIs\nBoth nodes are empty and needed to choose the AI model (e.g., OpenAI, Claude, Gemini). Click on the plus (+) icon below the node and choose your AI.\nAfter you choose an AI, double-click on it to add your personal API Key/Credential.",
+        "height": 640,
+        "width": 704,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2432,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "0835b2ee-39f9-47eb-8ee1-b62fe72cf32f",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "## STEP #6\n### 🧠 AI For Create Mail Content\nThis is the core node that generates a unique, non-spammy email for each recipient by tailoring your product's value proposition to their 'about' information.\n\n**⚠️ Customization Required:**\n-> Double-click the node to open the settings.\n-> We have provided a default System Message and Prompt. You must replace all text enclosed in `[square brackets]` with your product details and value proposition.\nFeel free to completely customize the prompt to fit your brand voice and goals.",
+        "height": 512,
+        "width": 352,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2432,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "1911029b-e4b9-447a-bb21-155169e6e9ad",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "## STEP #7\n### 🌐 AI For Language Decision\nThis node acts as a multilingual filter. It analyzes the company's 'about' information to detect the primary language. Generates a professional, context-appropriate subject line in the detected language.\n\n**⚠️ Customization Required:**\n-> Double-click the node to open the settings.\n-> You must edit the `[square brackets]` in the System Message/Prompt to define your product name and the subject line structure for each language you target.",
+        "height": 512,
+        "width": 352,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2784,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "3098407c-c211-4782-9f35-57bb0d3535b6",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "content": "### ✅ Set FALSE To TRUE Used Rows\nThis node is **CRUCIAL** for preventing re-sending. It takes the successfully processed row and updates the `is_sent` column value from `FALSE` to `TRUE` in your main CSV file.\n\n**🛑 ATTENTION:**\nThis is an automatic logging process. **Do not modify or remove this node.** Incorrect changes will result in duplicate emails being sent.",
+        "height": 592,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1952,
+        1008
+      ],
+      "typeVersion": 1,
+      "id": "92ba57da-5288-4e2f-a139-c126029f9cca",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "content": "### 🔁 Convert To File\nThis node performs the reverse of the \"Extract from CSV file\" step, converting the updated lead information (now marked as TRUE) back into a file/binary format ready for writing to the disk.\n\n**🛑 ATTENTION:**\nThis is an automated conversion step required for file saving. **Do not modify or remove this node.**",
+        "height": 592,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2192,
+        1008
+      ],
+      "typeVersion": 1,
+      "id": "19f5774e-2268-410d-a159-7244c7831437",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "content": "## STEP #10\n### Write CSV To Disk\nThis final node saves the updated lead data, including the newly marked `is_sent = TRUE` rows, back to your local storage.\n\n**⚠️ CRITICAL ACTION:**\nDouble-click the node and set the **File Path and Name** to be **IDENTICAL** to the path used in the **Read CSV File From Disk (STEP #4)** node.\n\n**Consistency is crucial:** If the paths do not match, the workflow will fail to correctly update the original CSV file, causing duplicate emails on the next cycle.",
+        "height": 592,
+        "width": 256,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2432,
+        1008
+      ],
+      "typeVersion": 1,
+      "id": "def08bb4-ae54-47ff-9e97-ac4cfe76504f",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "toEmail": "={{ $('Pick One Row').item.json.Email }}",
+        "subject": "={{ $('AI for language decision').item.json.output }} for {{ $('Pick One Row').item.json['Company Name'] }}",
+        "html": "=<p style=\"margin: 1rem; font-family: Arial, Helvetica, sans-serif; font-size: 15px; line-height: 1.4;\">\n{{ $('AI for create email content').item.json.output }}\n</p>",
+        "options": {
+          "appendAttribution": false,
+          "attachments": "data"
+        }
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        3440,
+        608
+      ],
+      "id": "b3ea2dd4-47a9-45d6-9cea-17c255be1aa6",
+      "name": "Send email",
+      "webhookId": "6c3ca0a5-54f2-44cc-9300-a504868540d9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const minimumTime = 0;\nconst maximumTime = 50;\n\nfunction fisherYatesNumber(min, max) {\n  const numbers = [];\n  for (let i = min; i <= max; i++) {\n    numbers.push(i);\n  }\n\n  for (let i = numbers.length - 1; i > 0; i--) {\n    const j = Math.floor(Math.random() * (i + 1));\n    [numbers[i], numbers[j]] = [numbers[j], numbers[i]];\n  }\n\n  return numbers[0];\n}\n\nconst randomNum = fisherYatesNumber(minimumTime, maximumTime);\n\nreturn [\n  {\n    json: {\n      randomNum\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        608
+      ],
+      "id": "c7212d2e-5164-44ac-b56d-4645c7068070",
+      "name": "Random Time Generator"
+    },
+    {
+      "parameters": {
+        "content": "**Keep these recommended critical values for optimal deliverability:**\n- **Schedule Trigger (Step #1):** Set to **55 minutes**.\n- **Random Generator (Step #2):** Set `maximumTime` to **50 minutes**. (Crucial: 5 min difference)\n- **Wait Node (Step #3):** Ensure **Resume** is `After Time Interval` and **Wait Unit** is `Minutes`.",
+        "height": 128,
+        "width": 720
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        752,
+        768
+      ],
+      "typeVersion": 1,
+      "id": "5f48360d-0ca4-4141-8f2e-0326269b0414",
+      "name": "Sticky Note18"
+    },
+    {
+      "parameters": {
+        "content": "## STEP #8\n### 📎 Get E-mail Attachment\nThis optional node (you can remove if no need) is used if you need to attach a file (e.g., PDF catalog, image, or price list) to your email. Double click to the node if you use;\n->  Set the file directory using the **File(s) Selector** field (just like Step #4).\n->  To personalize the attachment, drag the output from the AI (Step #7) output and drop it into the **File Name** option.",
+        "height": 592
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3136,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "c8a81b95-7e87-482e-bb7d-d7f669384d4d",
+      "name": "Sticky Note19"
+    },
+    {
+      "parameters": {
+        "content": "## STEP #9\n### ✉️ Send email\nDouble click to the node. \n**Operation**: `Send`,\n**From Email**: `[your_email_address@example.com]`\n**To Email**: `[drag / drop company email address from \"Pick One Row\" node]`\n**Subject**: `[Use Step #7 output.]`\n**Email Format**: `HTML` (Recommended)\n**HTML**: Insert the **AI Content (Step 6)** output, ensuring it's wrapped in HTML tags (e.g., `<p>...</p>`).\n**Attachments**: `data` (If any. You can remove that additional option if you don't have an attachment)\n\nPlease don't forget to edit the last step (**STEP #10**) below.",
+        "height": 592,
+        "width": 384,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3376,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "2ce8bf03-9df6-4e0d-a0ac-312a7d5abb0d",
+      "name": "Sticky Note20"
+    },
+    {
+      "parameters": {
+        "fileSelector": "/home/user/Desktop/neuraletter_suite_scrap.CSV",
+        "options": {
+          "fileExtension": "csv",
+          "fileName": "neuraletter_suite_scrap.CSV"
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        608
+      ],
+      "id": "ffd10e22-e97b-409f-a987-212cafcd7338",
+      "name": "Read CSV File from Disk"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [ { json: $input.first().json } ];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2272,
+        608
+      ],
+      "id": "3c15f2e2-cf35-4b3d-b2c0-aebc5f8eadee",
+      "name": "Pick One Row"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Random Time Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Pick One Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Write CSV To Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get E-mail attachment": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set FALSE to TRUE used rows": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI for language decision": {
+      "main": [
+        [
+          {
+            "node": "Get E-mail attachment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI for create email content": {
+      "main": [
+        [
+          {
+            "node": "AI for language decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Read CSV File from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Set FALSE to TRUE used rows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Random Time Generator": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read CSV File from Disk": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick One Row": {
+      "main": [
+        [
+          {
+            "node": "AI for create email content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "deecbbaf-616a-42be-a6b3-325b5e01d015",
+  "meta": {
+    "instanceId": "4aba203aa337befae280dc70e0feea11169c349863121aa91f66a5b19073c76a"
+  },
+  "id": "uLxJPoW3BtNa4bMc",
+  "tags": []
+}
