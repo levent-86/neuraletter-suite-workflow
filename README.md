@@ -12,7 +12,7 @@ Unlike standard bots, this workflow utilizes a **Fisher-Yates inspired randomiza
 
 ### Good to know
 - **Self-Hosted Requirement:** Due to its reliance on local file system operations (CSV read/write) this workflow can work on self-hosted only.
-- **Beginner Friendly:** Every single node in this workflow contains detailed **Sticky Notes (Steps #1 - #10)**. You don't need to be an expert; just follow the notes inside the editor!
+- **Beginner Friendly:** The workflow is organized into clear, logical sections with grouped Sticky Notes. You don't need to be an expert; just follow the section guides inside the editor!
 - **Safe Volume:** Designed to send approx. 375 - 750 emails per month approximately with a single email account, staying well within safe limits.
 - **Cost Efficient & Flexible:** Uses flexible access to various LLMs and your preferred **SMTP/Email Service** for sending.
 
@@ -21,7 +21,7 @@ Unlike standard bots, this workflow utilizes a **Fisher-Yates inspired randomiza
 - **🧠 LLM Agnostic Personalization:** Allowing seamless switching between top models (like Gemini, Claude, or GPT) for hyper-personalized content and subject line generation.
 - **🛡️ Duplicate Sending Prevention:** Reads and updates a mandatory `is_sent` column in your CSV, ensuring no lead receives the same email twice.
 - **🌐 Multilingual Outreach:** Automatically detects the target company's language from the `About` text and generates the entire subject line in that specific language.
-- **✨ Guided Setup:** Extensively documented with **Sticky Notes (Steps #1 - #10)** inside the workflow, making advanced configuration comfortable for all users.
+- **✨ Structured Documentation:** Nodes are grouped into functional sections (Timing, AI, File Ops) with concise instructions, making advanced configuration easy and clutter-free.
 
 ### How it works
 1. **Smart Scheduling:** The workflow wakes up at set intervals. It uses a custom **Fisher-Yates inspired algorithm** to generate an unpredictable, human-like delay (e.g., waiting 13 mins one time, 48 mins the next) to evade bot detection.
