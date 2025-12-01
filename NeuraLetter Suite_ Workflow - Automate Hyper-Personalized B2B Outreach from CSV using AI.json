@@ -308,38 +308,6 @@
     },
     {
       "parameters": {
-        "content": "## Do NOT modify!",
-        "height": 208,
-        "width": 208,
-        "color": 3
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        2208,
-        544
-      ],
-      "typeVersion": 1,
-      "id": "30c07c9f-81b9-49d9-aa86-9e700db8a5fd",
-      "name": "Sticky Note4"
-    },
-    {
-      "parameters": {
-        "content": "## Do NOT modify!",
-        "height": 208,
-        "width": 224,
-        "color": 3
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        1728,
-        544
-      ],
-      "typeVersion": 1,
-      "id": "091c2809-2cd3-4734-90eb-0e03140a2d2b",
-      "name": "Sticky Note6"
-    },
-    {
-      "parameters": {
         "content": "## ✉️ Send Email\nHandles file attachments (optional) and sends the final email via SMTP.\n### **Setup:**\n1. **Attachment:** Set file path if needed, otherwise remove/bypass this node.\n2. **Send Email:** Map the AI outputs (Subject/Body) and Recipient Email into the fields.\n\n*Reminder: Don't forget to configure the final step below!*",
         "height": 592,
         "width": 496,
@@ -390,19 +358,67 @@
     },
     {
       "parameters": {
-        "content": "## Do NOT modify this two nodes!",
-        "height": 208,
-        "width": 464,
+        "content": "",
+        "height": 192,
+        "width": 224,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1968,
-        1376
+        1392
       ],
       "typeVersion": 1,
       "id": "756d7478-fbd8-4a75-91ec-2202c8061b3e",
       "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 192,
+        "width": 224,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2208,
+        1392
+      ],
+      "typeVersion": 1,
+      "id": "81cd8e24-5a8e-4e31-84b3-13ab48037c45",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 192,
+        "width": 224,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1728,
+        560
+      ],
+      "typeVersion": 1,
+      "id": "780d6aa4-9fdd-49a4-a689-67b06922877e",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 192,
+        "width": 192,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2224,
+        560
+      ],
+      "typeVersion": 1,
+      "id": "2834789f-1973-43e9-9ecd-3600c8b6cdc1",
+      "name": "Sticky Note11"
     }
   ],
   "pinData": {},
@@ -549,7 +565,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "b85cb720-8b47-47ab-987a-3305314cf368",
+  "versionId": "f7921183-298d-47de-8cfa-59598097e6b7",
   "meta": {
     "instanceId": "4aba203aa337befae280dc70e0feea11169c349863121aa91f66a5b19073c76a"
   },
